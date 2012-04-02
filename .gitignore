@@ -1,0 +1,30 @@
+# the usual suspects
+__MACOSX
+.DS_Store
+.backups
+.svn
+*.tmp
+*.bak*
+
+# Store nothing from this directory as it should be customized by end user
+autorun
+
+# don't store packages, archives, etc. from other places
+*.Z
+*.zip
+*.tgz
+*.gz
+*.bz2
+*.bzip2
+*.tar
+
+# these are emacs cruft
+*~
+\#*\#
+.\#*
+
+# the following are all generated via the POD
+*.6
+*.html
+*.dvi
+*.pdf
