@@ -1,6 +1,6 @@
 # showtitle3.pl -- Irssi script to show <title> of URLs
 ## Copyright (c) 2010 Tamara Temple <tamouse@gmail.com>
-## Time-stamp: <2011-12-30 14:59:54 jessica>
+## Time-stamp: <2012-07-08 11:42:43 tamara>
 ## VERSION: 3.0.4-r1
 #   - Copyright (C) 2012 Tamara Temple Web Development
 #   - 
@@ -206,21 +206,28 @@ C<$st_line_prefix> - the text shown by showtitle when it writes to the channel b
 
 =cut
 
-Irssi::settings_add_str('misc','st_line_prefix','<URL> ');
+Irssi::settings_add_str('showtitle','st_line_prefix','<URL> ');
 
 =item *
 C<$st_connect_timeout> - time in seconds before curl connection attempt times out
 
 =cut
 
-Irssi::settings_add_int('misc','st_connect_timeout',15);
+Irssi::settings_add_int('showtitle','st_connect_timeout',15);
 
 =item *
 C<$st_max_timeout> - time in seconds before curl operation times out
 
 =cut
 
-Irssi::settings_add_int('misc','st_max_timeout',30);
+Irssi::settings_add_int('showtitle','st_max_timeout',30);
+
+=item *
+C<$st_throttle_threshhold> - time in seconds to ignore incoming messages
+
+=cut
+
+Irssi::settings_add_int('showtitle','st_throttle_threshhold',5);
 
 =back
 
@@ -347,7 +354,16 @@ my $database     = $irssi_dir . "/".$database_basename.".dat";
 my $database_tmp = $irssi_dir . "/".$database_basename.".tmp";
 my $database_old = $irssi_dir . "/".$database_basename.".dat~";
 
+=pod
 
+=item *
+C<$last_message_time> - timestamp of the last message handled. Used in throttled()
+
+=cut
+
+my $last_message_time = time(); # initialize to load time
+
+=pod
 
 =back
 
@@ -582,6 +598,25 @@ sub uc_irc($) {
     $str =~ tr/a-z{|}/A-Z[\\]/;
     return $str;
 }
+
+# check to make sure we're not trying to process too many messages too fast
+sub throttled {
+    my $threshhold = Irssi::settings_get_int('st_throttle_threshhold');
+    my $current_time = time();
+    DebugPrint("[in throttle] thrsh: $threshhold  last: $last_message_time  cur: $current_time diff: ".($current_time - ($last_message_time + $threshhold)). " Exceeded? " . ((($current_time - ($last_message_time + $threshhold)) > 0)?'yes':'no'));
+    if (($current_time - ($last_message_time + $threshhold)) > 0) {
+	DebugPrint("[in throttle]: passing message.");
+	$last_message_time = $current_time;
+	return 0;
+    } else {
+	DebugPrint("[in throttle]: skipping message");
+	return 1;
+    }
+}
+
+
+
+
 
 
 shownotice("Database is $database");
@@ -1997,6 +2032,9 @@ sub sig_showtitle {
 	unless ($server && $server->{connected}) {
 		showerror("not connected to server");
 	}
+
+	return if throttled();
+
 	Irssi::signal_continue(@_);
 	$target = $nick if $target eq "";
 	$current_chatnet = $server->{chatnet};
@@ -2034,6 +2072,9 @@ returns void
 
 sub sig_own_showtitle {
 	my ($server, $msg, $target) = @_;
+
+	return if throttled();
+
 	unless ($server && $server->{connected}) {
 		showerror("not connected to server");
 	}
