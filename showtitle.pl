@@ -1,6 +1,6 @@
 # showtitle3.pl -- Irssi script to show <title> of URLs
 ## Copyright (c) 2010 Tamara Temple <tamouse@gmail.com>
-## Time-stamp: <2012-07-08 11:42:43 tamara>
+## Time-stamp: <2012-07-15 13:16:01 tamara>
 ## VERSION: 3.0.4-r1
 #   - Copyright (C) 2012 Tamara Temple Web Development
 #   - 
@@ -1173,12 +1173,13 @@ B<showtitle> checks the message to see if it contains a valid URL string (curren
 sub showtitle {
     my ($server, $msg, $target) = @_;
     my $url = find_url($msg);
-    my $line_prefix = Irssi::settings_get_str('st_line_prefix')?Irssi::settings_get_str('st_line_prefix'):"URL title: ";
     if ($url && is_html($url)) {
+	return if throttled();
 	my $page = grab_page($url);
 	if ($page && $page !~ $empty_re) {
 	    my $title = get_title($page);
 	    if ($title && $title !~ $empty_re) {
+		my $line_prefix = Irssi::settings_get_str('st_line_prefix')?Irssi::settings_get_str('st_line_prefix'):"URL title: ";
 		if (pass_filter($server, $target, $url)) {
 		    me_action($server, $target, $line_prefix . $title);
 		} else {
@@ -2032,8 +2033,6 @@ sub sig_showtitle {
 	unless ($server && $server->{connected}) {
 		showerror("not connected to server");
 	}
-
-	return if throttled();
 
 	Irssi::signal_continue(@_);
 	$target = $nick if $target eq "";
