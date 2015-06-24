@@ -1,7 +1,7 @@
 # showtitle3.pl -- Irssi script to show <title> of URLs
 ## Copyright (c) 2010 Tamara Temple <tamouse@gmail.com>
-## Time-stamp: <2012-07-15 13:18:02 tamara>
-## VERSION: 3.1
+## Time-stamp: <2012-10-01 01:22:03 tamara>
+## VERSION: 3.2
 #   - Copyright (C) 2012 Tamara Temple Web Development
 #   - 
 #   - This program is free software; you can redistribute it and/or
@@ -186,7 +186,7 @@ use Data::Dumper::Names;
 use strict;
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "3.1";
+$VERSION = "3.2";
 
 %IRSSI = (
 	  'authors'	=> 'Tamara Temple, Jess',
@@ -394,6 +394,10 @@ returns void
 =back
 
 =cut
+
+sub dbg {
+    DebugPrint(@_);
+}
 
 sub DebugPrint { 
 	my $debugmsg = shift;
@@ -1174,6 +1178,7 @@ sub showtitle {
     my ($server, $msg, $target) = @_;
     my $url = find_url($msg);
     if ($url && is_html($url)) {
+	DebugPrint("(showtitle) at line: ".__LINE__." msg=[$msg] target=[$target] chatnet=[".$server->{chatnet}."] url=[$url]");
 	return if throttled();
 	my $page = grab_page($url);
 	if ($page && $page !~ $empty_re) {
@@ -2071,9 +2076,6 @@ returns void
 
 sub sig_own_showtitle {
 	my ($server, $msg, $target) = @_;
-
-	return if throttled();
-
 	unless ($server && $server->{connected}) {
 		showerror("not connected to server");
 	}
