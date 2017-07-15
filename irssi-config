@@ -1,0 +1,18 @@
+settings = {
+  core = {
+    real_name = "Tamara Temple";
+    user_name = "tamara@tamouse.org";
+    nick = "showtitlebot";
+  };
+  "fe-text" = { actlist_sort = "refnum"; };
+};
+chatnets = { freenode = { type = "IRC"; }; };
+servers = (
+  {
+    address = "irc.freenode.net";
+    chatnet = "freenode";
+    port = "6667";
+    use_tls = "no";
+    tls_verify = "no";
+  }
+);
