@@ -1,7 +1,7 @@
 # showtitle3.pl -- Irssi script to show <title> of URLs
 ## Copyright (c) 2010 Tamara Temple <tamouse@gmail.com>
-## Time-stamp: <2017-07-15 00:36:49 tamara>
-## VERSION: 3.3
+## Time-stamp: <2017-07-15 00:52:19 tamara>
+## VERSION: 3.3.1
 #   - Copyright (C) 2012 Tamara Temple Web Development
 #   -
 #   - This program is free software; you can redistribute it and/or
@@ -211,7 +211,7 @@ use Data::Dumper::Names;
 use strict;
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "3.2";
+$VERSION = "3.3.0";
 
 %IRSSI = (
   'authors'	=> 'Tamara Temple, Jess',
@@ -219,7 +219,7 @@ $VERSION = "3.2";
   'name'	=> 'showtitle',
   'description'	=> 'Show the <title> from a URL in the given window. this version has channel specificity and filters, adds in-channel !commands, user management',
   'license'	=> 'GPLv2',
-  'url'		=> 'http://public.tamaratemple.com/irssi/showtitle-'.$VERSION.'.pl.txt'
+  'url'		=> 'https://github.com/tamouse/irssi-showtitle'
     );
 
 =head2 Irssi Configurable Settings
