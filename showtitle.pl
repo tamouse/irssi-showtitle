@@ -1,6 +1,6 @@
 # showtitle3.pl -- Irssi script to show <title> of URLs
 ## Copyright (c) 2010 Tamara Temple <tamouse@gmail.com>
-## Time-stamp: <2017-07-15 00:52:19 tamara>
+## Time-stamp: <2017-07-15 00:54:43 tamara>
 ## VERSION: 3.3.1
 #   - Copyright (C) 2012 Tamara Temple Web Development
 #   -
@@ -211,7 +211,7 @@ use Data::Dumper::Names;
 use strict;
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "3.3.0";
+$VERSION = "3.3.1";
 
 %IRSSI = (
   'authors'	=> 'Tamara Temple, Jess',
