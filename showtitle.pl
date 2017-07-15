@@ -1,6 +1,6 @@
 # showtitle3.pl -- Irssi script to show <title> of URLs
 ## Copyright (c) 2010 Tamara Temple <tamouse@gmail.com>
-## Time-stamp: <2017-07-14 23:23:12 tamara>
+## Time-stamp: <2017-07-15 00:36:49 tamara>
 ## VERSION: 3.3
 #   - Copyright (C) 2012 Tamara Temple Web Development
 #   -
@@ -214,13 +214,13 @@ use vars qw($VERSION %IRSSI);
 $VERSION = "3.2";
 
 %IRSSI = (
-	  'authors'	=> 'Tamara Temple, Jess',
-	  'contact'	=> 'tamouse\@gmail.com',
-	  'name'	=> 'showtitle',
-	  'description'	=> 'Show the <title> from a URL in the given window. this version has channel specificity and filters, adds in-channel !commands, user management',
-	  'license'	=> 'GPLv2',
-	  'url'		=> 'http://public.tamaratemple.com/irssi/showtitle-'.$VERSION.'.pl.txt'
-	 );
+  'authors'	=> 'Tamara Temple, Jess',
+  'contact'	=> 'tamouse\@gmail.com',
+  'name'	=> 'showtitle',
+  'description'	=> 'Show the <title> from a URL in the given window. this version has channel specificity and filters, adds in-channel !commands, user management',
+  'license'	=> 'GPLv2',
+  'url'		=> 'http://public.tamaratemple.com/irssi/showtitle-'.$VERSION.'.pl.txt'
+    );
 
 =head2 Irssi Configurable Settings
 
@@ -430,7 +430,7 @@ returns void
 =cut
 
 sub dbg {
-    DebugPrint(@_);
+  DebugPrint(@_);
 }
 
 sub DebugPrint {
@@ -610,9 +610,9 @@ returns string - convert string
 =cut
 
 sub lc_irc($) {
-    my ($str) = @_;
-    $str =~ tr/A-Z[\\]/a-z{|}/;
-    return $str;
+  my ($str) = @_;
+  $str =~ tr/A-Z[\\]/a-z{|}/;
+  return $str;
 }
 
 =head3 uc_irc
@@ -632,24 +632,24 @@ returns string - convert string
 =cut
 
 sub uc_irc($) {
-    my ($str) = @_;
-    $str =~ tr/a-z{|}/A-Z[\\]/;
-    return $str;
+  my ($str) = @_;
+  $str =~ tr/a-z{|}/A-Z[\\]/;
+  return $str;
 }
 
 # check to make sure we're not trying to process too many messages too fast
 sub throttled {
-    my $threshhold = Irssi::settings_get_int('st_throttle_threshhold');
-    my $current_time = time();
-    DebugPrint("[in throttle] thrsh: $threshhold  last: $last_message_time  cur: $current_time diff: ".($current_time - ($last_message_time + $threshhold)). " Exceeded? " . ((($current_time - ($last_message_time + $threshhold)) > 0)?'yes':'no'));
-    if (($current_time - ($last_message_time + $threshhold)) > 0) {
-	DebugPrint("[in throttle]: passing message.");
-	$last_message_time = $current_time;
-	return 0;
-    } else {
-	DebugPrint("[in throttle]: skipping message");
-	return 1;
-    }
+  my $threshhold = Irssi::settings_get_int('st_throttle_threshhold');
+  my $current_time = time();
+  DebugPrint("[in throttle] thrsh: $threshhold  last: $last_message_time  cur: $current_time diff: ".($current_time - ($last_message_time + $threshhold)). " Exceeded? " . ((($current_time - ($last_message_time + $threshhold)) > 0)?'yes':'no'));
+  if (($current_time - ($last_message_time + $threshhold)) > 0) {
+    DebugPrint("[in throttle]: passing message.");
+    $last_message_time = $current_time;
+    return 0;
+  } else {
+    DebugPrint("[in throttle]: skipping message");
+    return 1;
+  }
 }
 
 
@@ -824,17 +824,17 @@ C<%parse_database[entrytype] => &function;> - jump table
 =cut
 
 our %parse_database = (
-    listen => sub {
-        $_[0] =~ /^ ([^ ]*) ([^ ]*) (on|off)$/ or syntax_error;
-        do_listen  $1, $2, $3;
-    },
+  listen => sub {
+    $_[0] =~ /^ ([^ ]*) ([^ ]*) (on|off)$/ or syntax_error;
+    do_listen  $1, $2, $3;
+  },
 	filter => sub {
 		$_[0] =~ /^ ([^ ]*) ([^ ]*) (.*)$/ or syntax_error;
 		do_filter $1, $2, $3;
 	},
 	block => sub {
 		$_[0] =~ /^ ([^ ]*) ([^ ]*) (.*)$/ or syntax_error;
-		do_blodk $1, $2, $3;
+		do_block $1, $2, $3;
 	},
 	user => sub {
 		$_[0] =~ /^ ([^ ]*) ([^ ]*) ([^ ]*)$/ or syntax_error;
@@ -844,7 +844,7 @@ our %parse_database = (
 		$_[0] =~ /^ ([^ ]*) ([^ ]*) (on|off)$/ or syntax_error;
 		do_ignore $1, $2, $3;
 	}
-);
+    );
 
 
 
@@ -855,18 +855,18 @@ reads and processes the various entries in the database
 =cut
 
 sub read_database() {
-    %listen_on = ();
-    %filters = ();
-    %blocks = ();
-    %validusers = ();
-    open DATABASE, $database or return;
-    while (<DATABASE>) {
-        chomp;
-        /^([^ ]*)(| .*)$/ or syntax_error;
-        my $func = $parse_database{$1} or syntax_error;
-        $func->($2);
-    }
-    close DATABASE;
+  %listen_on = ();
+  %filters = ();
+  %blocks = ();
+  %validusers = ();
+  open DATABASE, $database or return;
+  while (<DATABASE>) {
+    chomp;
+    /^([^ ]*)(| .*)$/ or syntax_error;
+    my $func = $parse_database{$1} or syntax_error;
+    $func->($2);
+  }
+  close DATABASE;
 }
 
 
@@ -877,13 +877,13 @@ Writing the database to file
 =cut
 
 sub write_database {
-    open DATABASE, ">$database_tmp";
-    foreach my $chatnet (keys %listen_on) {
-        foreach my $channel (keys %{$listen_on{$chatnet}}) {
-            my $state = $listen_on{$chatnet}{$channel};
-            print DATABASE "listen $chatnet $channel $state\n";
-        }
+  open DATABASE, ">$database_tmp";
+  foreach my $chatnet (keys %listen_on) {
+    foreach my $channel (keys %{$listen_on{$chatnet}}) {
+      my $state = $listen_on{$chatnet}{$channel};
+      print DATABASE "listen $chatnet $channel $state\n";
     }
+  }
 	foreach my $chatnet (keys %filters) {
 		foreach my $channel (keys %{$filters{$chatnet}}) {
 			if (defined $filters{$chatnet}{$channel}) {
@@ -911,15 +911,15 @@ sub write_database {
 			}
 		}
 	}
-    foreach my $chatnet (keys %ignores) {
-        foreach my $channel (keys %{$ignores{$chatnet}}) {
-            my $state = $ignores{$chatnet}{$channel};
-            print DATABASE "ignore $chatnet $channel $state\n";
-        }
+  foreach my $chatnet (keys %ignores) {
+    foreach my $channel (keys %{$ignores{$chatnet}}) {
+      my $state = $ignores{$chatnet}{$channel};
+      print DATABASE "ignore $chatnet $channel $state\n";
     }
-   close DATABASE;
-    rename $database, $database_old;
-    rename $database_tmp, $database;
+  }
+  close DATABASE;
+  rename $database, $database_old;
+  rename $database_tmp, $database;
 	shownotice("wrote database");
 }
 
@@ -937,9 +937,9 @@ param array @_ - elements to add to the database
 =cut
 
 sub append_to_database(@) {
-    open DATABASE, ">>$database";
-    print DATABASE map {"$_\n"} @_;
-    close DATABASE;
+  open DATABASE, ">>$database";
+  print DATABASE map {"$_\n"} @_;
+  close DATABASE;
 }
 
 
@@ -968,15 +968,15 @@ sub is_html {
 	my $curlopt_connect_timeout = Irssi::settings_get_int('st_connect_timeout')?Irssi::settings_get_int('st_connect_timeout'):15;
 	my $curlopt_max_timeout = Irssi::settings_get_int('st_max_timeout')?Irssi::settings_get_int('st_max_timeout'):30;
 	my @curlopts = (
-	    "--fail",
+    "--fail",
 		"-I",
 		"--insecure",			# don't worry if a certificate doesn't pass
-	    '-A "Mozilla"',
+    '-A "Mozilla"',
 		"--connect-timeout ".$curlopt_connect_timeout,
-	    "--location",
+    "--location",
 		"--max-time ".$curlopt_max_timeout,
-	    "--silent"
-	);
+    "--silent"
+      );
 	my $cmd = $curl_cmd . ' ' . join( ' ', @curlopts ) . ' ' . "'" . $url . "'";
 	DebugPrint("cmd=$cmd");
 	my @result = `$cmd`;
@@ -984,15 +984,15 @@ sub is_html {
 		## OOPS, curl command returned an error
 		my $curl_error=$!;
 		showerror("Curl command: $cmd - returned an error: $curl_error.".
-		    " Current Chatnet: $current_chatnet".
-		    " Current channel: $current_channel".
-		    " Current URL: $url");
+              " Current Chatnet: $current_chatnet".
+              " Current channel: $current_channel".
+              " Current URL: $url");
 		return 0;
 	}
 	chomp(@result);
 	DebugPrint("Size of result: " . ( $#result + 1 ));
 	for (my $i = 0 ; $i <= $#result ; $i++ ) {
-	    DebugPrint("$i: $result[$i]");
+    DebugPrint("$i: $result[$i]");
 	}
 	my @content_type = grep(/^Content-Type:/,@result);
 	DebugPrint("Matches: ".($#content_type+1));
@@ -1040,17 +1040,17 @@ sub grab_page {
 	my $curlopt_max_timeout = Irssi::settings_get_int('st_max_timeout')?Irssi::settings_get_int('st_max_timeout'):30;
 	my $curl_cmd = "curl";
 	my @curlopts = (
-	    "--fail",
+    "--fail",
 		"--insecure",			# don't worry if a certificate doesn't pass
 		"-o $outputfile",
 		#"--max-filesize 10240", # this tends to cause some requests to fail strangely
-	    '-A "Mozilla"',
+    '-A "Mozilla"',
 		"--connect-timeout ".$curlopt_connect_timeout,
-	    "--location",			# follow 302 returns
+    "--location",			# follow 302 returns
 		"--max-time ".$curlopt_max_timeout,
-	    "--silent",
+    "--silent",
 		"--show-error"
-	);
+      );
 	my $cmd = $curl_cmd . ' ' . join( ' ', @curlopts ) . ' ' . "'" . $url . "'".' 2>&1';
 	DebugPrint("cmd=$cmd");
 	my @result = `$cmd`;
@@ -1058,8 +1058,8 @@ sub grab_page {
 		## OOPS, curl command returned an error
 		my $curl_error=$!;
 		showerror("Curl command: $cmd -  returned an error: $curl_error".
-		    " Current chatnet: $current_chatnet".
-		    " Current channel: $current_channel");
+              " Current chatnet: $current_chatnet".
+              " Current channel: $current_channel");
 		return undef;
 	}
 	DebugPrint("Value of \$#result=$#result");
@@ -1069,7 +1069,7 @@ sub grab_page {
 			shownotice("[$i] $result[$i]");
 		}
 		shownotice(" Current chatnet: $current_chatnet".
-			   " Current channel: $current_channel");
+               " Current channel: $current_channel");
 
 		return;
 	}
@@ -1177,15 +1177,15 @@ In addition, if the bareword "www" precedes a triple-word, it is treated as an H
 =cut
 
 sub find_url {
-   my $text = shift;
-   if($text =~ /\b((ftp|https?):\/\/[a-zA-Z0-9\/\\\:\?\%\.\&\;=#\-\_\!\+\~\,]*)/i){
+  my $text = shift;
+  if($text =~ /\b((ftp|https?):\/\/[a-zA-Z0-9\/\\\:\?\%\.\&\;=#\-\_\!\+\~\,]*)/i){
 		DebugPrint($1);
 	  return $1;
-   }elsif($text =~ /\b(www\.[a-zA-Z0-9\/\\\:\?\%\.\&\;=#\-\_\!\+\~\,]*)/i){
+  }elsif($text =~ /\b(www\.[a-zA-Z0-9\/\\\:\?\%\.\&\;=#\-\_\!\+\~\,]*)/i){
 		DebugPrint($1);
 	  return "http://".$1;
-   }
-   return undef;
+  }
+  return undef;
 }
 
 =head3 pass_filter
@@ -1220,10 +1220,13 @@ sub pass_filter {
 	return 1 unless (@thesefilters); # returns true if there are no filters for this channel
 	foreach my $filter (@thesefilters) {
 		DebugPrint("url = $url ; filter = $filter");
+    DebugPrint("Match Pass Filter!") if $url =~ $filter;
 		return 1 if $url =~ $filter; # returns true if there's a match
+    DebugPrint("$url did not match $filter, continuing");
 	}
 	return 0; # no matches, return false
 }
+
 =head3 pass_block
 
 Check to see if the url passes various blocks
@@ -1256,9 +1259,11 @@ sub pass_block {
 	return 1 unless (@theseblocks); # returns true if there are no blocks for this channel
 	foreach my $block (@theseblocks) {
 		DebugPrint("url = $url ; block = $block");
-		return 0 if $url =~ $block; # returns true if there's a match
+    DebugPrint("Matched Block Filter!") if $url =~ $block;
+		return 0 if $url =~ $block; # returns false if there's a match
+    DebugPrint("$url did not match $block, continuing");
 	}
-	return 1; # no matches, return false
+	return 1; # no matches, return true
 }
 
 
@@ -1284,24 +1289,23 @@ B<showtitle> checks the message to see if it contains a valid URL string (curren
 =cut
 
 sub showtitle {
-    my ($server, $msg, $target) = @_;
-    my $url = find_url($msg);
-    if ($url && is_html($url)) {
-	DebugPrint("(showtitle) at line: ".__LINE__." msg=[$msg] target=[$target] chatnet=[".$server->{chatnet}."] url=[$url]");
-	return if throttled();
-	my $page = grab_page($url);
-	if ($page && $page !~ $empty_re) {
+  my ($server, $msg, $target) = @_;
+  my $url = find_url($msg);
+  DebugPrint("(showtitle) at line: ".__LINE__." msg=[$msg] target=[$target] chatnet=[".$server->{chatnet}."] url=[$url]");
+  return if throttled();
+  return unless pass_filter($server, $target, $url);
+  return unless pass_block($server, $target, $url);
+
+  if ($url && is_html($url)) {
+    my $page = grab_page($url);
+    if ($page && $page !~ $empty_re) {
 	    my $title = get_title($page);
 	    if ($title && $title !~ $empty_re) {
-		my $line_prefix = Irssi::settings_get_str('st_line_prefix')?Irssi::settings_get_str('st_line_prefix'):"URL title: ";
-		if (pass_filter($server, $target, $url) && (pass_block($server, $target, $url))) {
-		    me_action($server, $target, $line_prefix . $title);
-		} else {
-		    printOnThisWindow($server,$target, $line_prefix . $title);
-		}
-	    }
-	}
+        my $line_prefix = Irssi::settings_get_str('st_line_prefix')?Irssi::settings_get_str('st_line_prefix'):"URL title: ";
+        me_action($server, $target, $line_prefix . $title);
+      }
     }
+  }
 }
 
 ########## Command Processing ##########
@@ -1452,7 +1456,7 @@ sub listen_help {
 		"  !st listen off - turns listening off for the current channel/query",
 		"  !st listen help - displays this message",
 		"  !st listen - displays current channel/query's listening status"
-		);
+      );
 	foreach my $m (@help_msg) {
 		say_message($server, $nick, $m);
 	}
@@ -1665,7 +1669,7 @@ sub filter_help {
 		"",
 		"If you don't specify the qr/.../ syntax, the filter will be converted to use it.",
 		"This is especially important to note if you want to delete the filter subsequently."
-		);
+      );
 	foreach my $m (@help_msg) {
 		say_message($server, $nick, $m);
 	}
@@ -1883,7 +1887,7 @@ sub block_help {
 		"",
 		"If you don't specify the qr/.../ syntax, the block will be converted to use it.",
 		"This is especially important to note if you want to delete the block subsequently."
-		);
+      );
 	foreach my $m (@help_msg) {
 		say_message($server, $nick, $m);
 	}
@@ -2070,12 +2074,12 @@ param string $target - channel/query to send to
 =cut
 
 sub user_request {
-    my ($user, $server, $nick, $address, $target) = @_;
-    my $chatnet = lc_irc $server->{chatnet};
-    my $channel = lc_irc $target;
-    my $botnick = $server->{nick};
-    say_message($server,$botnick,"Request from $nick ($address):");
-    say_message($server,$botnick,"Please add $user to $chatnet $channel user list");
+  my ($user, $server, $nick, $address, $target) = @_;
+  my $chatnet = lc_irc $server->{chatnet};
+  my $channel = lc_irc $target;
+  my $botnick = $server->{nick};
+  say_message($server,$botnick,"Request from $nick ($address):");
+  say_message($server,$botnick,"Please add $user to $chatnet $channel user list");
 }
 
 =head3 user_help
@@ -2101,35 +2105,35 @@ param string $target - channel/query to send to
 =cut
 
 sub user_help {
-	 my ($server, $nick, $address, $target) = @_;
-	 my @help_msg = (
-		 "Valid user help",
-		 "",
-		 "   !st user - show current (calling) user's status",
-		 "   !st user add hostmask - add the hostmask to current channel's valid user list",
-		 "   !st user delete hostmask - delete the hostmask from the current channel's valid user list",
-		 "   !st request - request the bot owner to add the current (calling) user's address",
-		 "	!st request hostmask - request the bot owner to add the given hostmask",
-		 "   !st user list - list the users for the current channel",
-		 "   !st user help - this message",
-		 "",
-		 "$IRSSI{name} implements a valid user concept that limits",
-		 "certain commands to people on the valid user list.",
-		 "Users are kept on a per-chatnet, per-channel basis",
-		 "and are based on the user's hostmask.",
-		 "Thus, if you change hostmasks, you will need to be added to",
-		 "the valid user database again for each channel you want",
-		 "control over.",
-		 "",
-		 "Note if no users are specified for a given channel on a network,",
-		 "all commands are available freely. This has the unfortunate side-effect",
-		 "that the first person who adds a user locks it down for everyone else.",
-		 "(except the bot owner)."
-		 );
-	 foreach my $m (@help_msg) {
-		 say_message($server, $nick, $m);
-	 }
- }
+  my ($server, $nick, $address, $target) = @_;
+  my @help_msg = (
+    "Valid user help",
+    "",
+    "   !st user - show current (calling) user's status",
+    "   !st user add hostmask - add the hostmask to current channel's valid user list",
+    "   !st user delete hostmask - delete the hostmask from the current channel's valid user list",
+    "   !st request - request the bot owner to add the current (calling) user's address",
+    "	!st request hostmask - request the bot owner to add the given hostmask",
+    "   !st user list - list the users for the current channel",
+    "   !st user help - this message",
+    "",
+    "$IRSSI{name} implements a valid user concept that limits",
+    "certain commands to people on the valid user list.",
+    "Users are kept on a per-chatnet, per-channel basis",
+    "and are based on the user's hostmask.",
+    "Thus, if you change hostmasks, you will need to be added to",
+    "the valid user database again for each channel you want",
+    "control over.",
+    "",
+    "Note if no users are specified for a given channel on a network,",
+    "all commands are available freely. This has the unfortunate side-effect",
+    "that the first person who adds a user locks it down for everyone else.",
+    "(except the bot owner)."
+      );
+  foreach my $m (@help_msg) {
+    say_message($server, $nick, $m);
+  }
+}
 
 
 =head3 show_user_status
@@ -2155,11 +2159,11 @@ param string $target - channel/query to send to
 =cut
 
 sub show_user_status {
-    my ($server, $nick, $address, $target) = @_;
-    my $chatnet = lc_irc $server->{chatnet};
-    my $channel = lc_irc $target;
-    my $status = (is_validuser($address, $chatnet, $channel)) ? " is " : " is not ";
-    say_message($server, $target, $nick . $status . "a valid user on $chatnet $channel");
+  my ($server, $nick, $address, $target) = @_;
+  my $chatnet = lc_irc $server->{chatnet};
+  my $channel = lc_irc $target;
+  my $status = (is_validuser($address, $chatnet, $channel)) ? " is " : " is not ";
+  say_message($server, $target, $nick . $status . "a valid user on $chatnet $channel");
 }
 
 =head3 showtitle_help
@@ -2185,23 +2189,23 @@ param string $target - channel/query to send to
 =cut
 
 sub showtitle_help {
-    my ($server, $nick, $address, $target) = @_;
-    my @help_msg = (
-	"$IRSSI{name} $VERSION help",
-	"",
-	"the following commands are available:",
-	"  !st listen [on|off|list|help]",
-	"  !st filter [add regex|delete regex|list|help] ",
-	"  !st block [add regex|delete regex|list|help] ",
-	"  !st user [add address|delete address|list|help]",
-	"  !st help",
-	"",
-	"you can also use !showtitle as the command prefix instead of !st"
-	);
-    foreach my $m (@help_msg) {
-	say_message($server, $nick, $m);
-    }
-    say_message($server, $target, "help sent");
+  my ($server, $nick, $address, $target) = @_;
+  my @help_msg = (
+    "$IRSSI{name} $VERSION help",
+    "",
+    "the following commands are available:",
+    "  !st listen [on|off|list|help]",
+    "  !st filter [add regex|delete regex|list|help] ",
+    "  !st block [add regex|delete regex|list|help] ",
+    "  !st user [add address|delete address|list|help]",
+    "  !st help",
+    "",
+    "you can also use !showtitle as the command prefix instead of !st"
+      );
+  foreach my $m (@help_msg) {
+    say_message($server, $nick, $m);
+  }
+  say_message($server, $target, "help sent");
 }
 
 
@@ -2212,41 +2216,41 @@ A jump table to determine which subroutine to use to process the command
 =cut
 
 our %parse_command = (
-    listen => sub {
-	my ($data, $server, $nick, $address, $target) = @_;
-      SWITCH: {
+  listen => sub {
+    my ($data, $server, $nick, $address, $target) = @_;
+  SWITCH: {
 	  $data =~ /^ (on|off)$/ && do {process_listen $1, $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^ list$/ && do {show_listen $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^ help$/ && do {listen_help $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^$/ && do {show_listen_status $server, $nick, $address, $target; last SWITCH;};
 	  say_message($server, $target, "Invalid syntax. Try !st listen help");
-	}
-    },
-    filter => sub {
-	my ($data, $server, $nick, $address, $target) = @_;
-      SWITCH: {
+    }
+  },
+  filter => sub {
+    my ($data, $server, $nick, $address, $target) = @_;
+  SWITCH: {
 	  $data =~ /^ delete (.*)$/ && do {delete_filter $1, $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^ list$/ && do {show_filters $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^ help$/ && do {filter_help $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^ add (.*)$/ && do {add_filter $1, $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^$/ && do {show_filter_status $server, $nick, $address, $target; last SWITCH;};
 	  say_message($server, $target, "Invalid syntax. Try !st filter help");
-	}
-    },
-    block => sub {
-	my ($data, $server, $nick, $address, $target) = @_;
-      SWITCH: {
+    }
+  },
+  block => sub {
+    my ($data, $server, $nick, $address, $target) = @_;
+  SWITCH: {
 	  $data =~ /^ delete (.*)$/ && do {delete_block $1, $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^ list$/ && do {show_blocks $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^ help$/ && do {block_help $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^ add (.*)$/ && do {add_block $1, $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^$/ && do {show_block_status $server, $nick, $address, $target; last SWITCH;};
 	  say_message($server, $target, "Invalid syntax. Try !st block help");
-	}
-    },
-    user => sub {
-	my ($data, $server, $nick, $address, $target) = @_;
-      SWITCH: {
+    }
+  },
+  user => sub {
+    my ($data, $server, $nick, $address, $target) = @_;
+  SWITCH: {
 	  $data =~ /^ add ([^ ]*)$/ && do {add_user $1, $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^ delete ([^ ]*)$/ && do {delete_user $1, $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^ request$/ && do {user_request $address, $server, $nick, $address, $target; last SWITCH;};
@@ -2255,12 +2259,12 @@ our %parse_command = (
 	  $data =~ /^ help$/ && do {user_help $server, $nick, $address, $target; last SWITCH;};
 	  $data =~ /^$/ && do {show_user_status $server, $nick, $address, $target; last SWITCH;};
 	  say_message($server, $target, "Invalid syntax. Try !st user help");
-	}
-    },
-    help => sub {
-	my ($data, $server, $nick, $address, $target) = @_;
-	showtitle_help($server, $nick, $address, $target);
     }
+  },
+  help => sub {
+    my ($data, $server, $nick, $address, $target) = @_;
+    showtitle_help($server, $nick, $address, $target);
+  }
     );
 
 
@@ -2294,26 +2298,26 @@ returns void
 
 sub process_command {
 	my ($server, $msg, $nick, $address, $target) = @_;
-	SWITCH: {
-	$msg =~ /^!(showtitle|st) ([^ ]*)(| .*)$/ &&
-		do {
-			my $cmd = $2;
-			my $data = $3;
-			my $func = $parse_command{$cmd} or
-				do {say_message($server, $target, "Syntax error. Try !st help"); return;};
-			$func->($data, $server, $nick, $address, $target);
-			last SWITCH;
-		};
-	$msg =~ /^!(showtitle|st)$/ &&
-		do {
-			say_message($server, $target, "for help type !st help");
-			last SWITCH;
-		};
-	$msg =~ /^!help(| .*)$/ &&
-		do {
-			say_message($server, $target, "for help type !st help");
-			last SWITCH;
-		};
+ SWITCH: {
+   $msg =~ /^!(showtitle|st) ([^ ]*)(| .*)$/ &&
+       do {
+         my $cmd = $2;
+         my $data = $3;
+         my $func = $parse_command{$cmd} or
+             do {say_message($server, $target, "Syntax error. Try !st help"); return;};
+         $func->($data, $server, $nick, $address, $target);
+         last SWITCH;
+   };
+   $msg =~ /^!(showtitle|st)$/ &&
+       do {
+         say_message($server, $target, "for help type !st help");
+         last SWITCH;
+   };
+   $msg =~ /^!help(| .*)$/ &&
+       do {
+         say_message($server, $target, "for help type !st help");
+         last SWITCH;
+   };
 	}
 }
 
@@ -2602,7 +2606,7 @@ sub cmd_stuser_delete {
 	}
 	return unless defined $validusers{$chatnet}{$channel};
 	$validusers{$chatnet}{$channel} =
-		[grep {lc $_ ne lc $address} @{$validusers{$chatnet}{$channel}}];
+      [grep {lc $_ ne lc $address} @{$validusers{$chatnet}{$channel}}];
 	write_database;
 	shownotic("$address removed from $chatnet $channel");
 }
@@ -2793,7 +2797,7 @@ sub cmd_stfilter_delete {
 		$filter = eval $filter;
 	}
 	$filters{$chatnet}{$channel} =
-		[grep {lc $_ ne lc $filter} @{$filters{$chatnet}{$channel}}];
+      [grep {lc $_ ne lc $filter} @{$filters{$chatnet}{$channel}}];
 	write_database;
 	shownotice("$filter removed from $chatnet $channel");
 }
@@ -2984,7 +2988,7 @@ sub cmd_stblock_delete {
 		$block = eval $block;
 	}
 	$blocks{$chatnet}{$channel} =
-		[grep {lc $_ ne lc $block} @{$blocks{$chatnet}{$channel}}];
+      [grep {lc $_ ne lc $block} @{$blocks{$chatnet}{$channel}}];
 	write_database;
 	shownotice("$block removed from $chatnet $channel");
 }

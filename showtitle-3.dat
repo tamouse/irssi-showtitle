@@ -1,0 +1,2 @@
+listen freenode ##showtitle-test on
+block freenode ##showtitle-test (?^i:.*\.gawker\.com)
