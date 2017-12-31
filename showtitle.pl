@@ -1,7 +1,7 @@
 # showtitle3.pl -- Irssi script to show <title> of URLs
 ## Copyright (c) 2010 Tamara Temple <tamouse@gmail.com>
-## Time-stamp: <2017-07-15 00:54:43 tamara>
-## VERSION: 3.3.1
+## Time-stamp: <2017-12-31 17:59:23 tamara>
+## VERSION: 3.3.2
 #   - Copyright (C) 2012 Tamara Temple Web Development
 #   -
 #   - This program is free software; you can redistribute it and/or
@@ -211,7 +211,7 @@ use Data::Dumper::Names;
 use strict;
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "3.3.1";
+$VERSION = "3.3.2";
 
 %IRSSI = (
   'authors'	=> 'Tamara Temple, Jess',
@@ -994,7 +994,7 @@ sub is_html {
 	for (my $i = 0 ; $i <= $#result ; $i++ ) {
     DebugPrint("$i: $result[$i]");
 	}
-	my @content_type = grep(/^Content-Type:/,@result);
+	my @content_type = grep(/^Content-Type:/i,@result);
 	DebugPrint("Matches: ".($#content_type+1));
 
 	for (my $i = 0; $i < $#content_type+1; $i++) {
