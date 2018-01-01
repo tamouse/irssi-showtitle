@@ -1,7 +1,7 @@
 # showtitle3.pl -- Irssi script to show <title> of URLs
 ## Copyright (c) 2010 Tamara Temple <tamouse@gmail.com>
-## Time-stamp: <2017-12-31 17:59:23 tamara>
-## VERSION: 3.3.2
+## Time-stamp: <2017-12-31 18:32:09 tamara>
+## VERSION: 3.3.3
 #   - Copyright (C) 2012 Tamara Temple Web Development
 #   -
 #   - This program is free software; you can redistribute it and/or
@@ -207,11 +207,10 @@ turns debugging for showtitle script on or off, or reports status
 =cut
 
 use Irssi qw();
-use Data::Dumper::Names;
 use strict;
 use vars qw($VERSION %IRSSI);
 
-$VERSION = "3.3.2";
+$VERSION = "3.3.3";
 
 %IRSSI = (
   'authors'	=> 'Tamara Temple, Jess',
